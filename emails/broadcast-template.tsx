@@ -84,10 +84,10 @@ export const BroadcastEmail = ({
           <Hr style={emailStyles.hr} />
 
           <Text style={emailStyles.footer}>
-            The Lacrosse Lab
+            Experiment Lacrosse
             <br />
             <span>
-              <Link target="_blank" href="https://thelacrosselab.com" style={emailStyles.linkStyle}>Website</Link>
+              <Link target="_blank" href="https://experimentlacrosse.com" style={emailStyles.linkStyle}>Website</Link>
               <span> | </span>
               <Link target="_blank" href="https://instagram.com/lacrosse.lab" style={emailStyles.linkStyle}>Instagram</Link>
             </span>
@@ -95,8 +95,8 @@ export const BroadcastEmail = ({
             <br />
             <br />
             If you have any questions, please reach out to:{' '}
-            <Link href="mailto:carter@thelacrosselab.com" style={emailStyles.linkStyle}>
-              carter@thelacrosselab.com
+            <Link href="mailto:carter@experimentlacrosse.com" style={emailStyles.linkStyle}>
+              carter@experimentlacrosse.com
             </Link>
             .
           </Text>

@@ -11,18 +11,12 @@ export default function HomePage() {
       <main className="flex-1 min-h-[70vh] lg:min-h-[77vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 min-h-0 bg-[navy]/10 backdrop-blur-md">
         <div className="container mx-auto text-center max-w-4xl">
           <AnimatedSection animation="fadeIn" delay={0.2}>
-            <div className="mb-2 flex justify-center">
-              <Image src="/logo.svg" alt="Word Lab" width={400} height={52} className="h-12 sm:h-16 w-auto" priority />
+            <div className="mb-10 flex justify-center">
+              <Image src="/brand/wordmark-cream.svg" alt="Experiment Lacrosse" width={400} height={96} className="h-16 sm:h-24 w-auto" priority />
             </div>
           </AnimatedSection>
           
-          <AnimatedSection animation="fadeIn" delay={0.4}>
-            <p className="text-xl sm:text-2xl text-cream text-pretty mb-12 max-w-3xl mx-auto leading-relaxed tracking-tight font-semibold">
-              Open To All, Earned By Few. 
-            </p>
-          </AnimatedSection>
-          
-          <AnimatedSection animation="slideIn" direction="up" delay={0.6}>
+          <AnimatedSection animation="slideIn" direction="up" delay={0.4}>
             <Link href="/pricing">
               <Button 
                 size="lg"
@@ -50,7 +44,7 @@ export default function HomePage() {
           <AnimatedSection animation="slideIn" direction="up" delay={0.4} scrollTrigger>
             <div className="prose prose-lg max-w-none text-center">
               <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                The Lacrosse Lab is Central Virginia's first dedicated women's lacrosse training program—a space built for players who bring energy, positivity, and a love of hard work.
+                Experiment Lacrosse is Central Virginia's first dedicated women's lacrosse training program—a space built for players who bring energy, positivity, and a love of hard work.
               </p>
               
               <p className="text-lg text-muted-foreground leading-relaxed mb-6">
@@ -124,7 +118,7 @@ export default function HomePage() {
                 <CardContent>
                   <p className="text-muted-foreground">
                   Coach Reif brings over 30 years of coaching experience across youth and high-school sports, including his current role with the Collegiate School women's lacrosse program. Known for his creativity, energy, and infectious enthusiasm, he's the "drill king" who makes every session challenging and fun.
-                  Reif's approach blends strong fundamentals with imaginative, fast-paced training designed to keep players engaged and improving. His commitment to community, joy, and player development is at the heart of The Lacrosse Lab experience.
+                  Reif's approach blends strong fundamentals with imaginative, fast-paced training designed to keep players engaged and improving. His commitment to community, joy, and player development is at the heart of the Experiment Lacrosse experience.
                   </p>
                 </CardContent>
               </Card>

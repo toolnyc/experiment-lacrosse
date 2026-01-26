@@ -49,7 +49,7 @@ export default function EmailPreviewPage() {
   // Mock data for BroadcastEmail
   const mockBroadcastData = {
     subject: 'Important Update: New Training Schedule',
-    bodyText: `# Welcome to The Lacrosse Lab
+    bodyText: `# Welcome to Experiment Lacrosse
 
 We're excited to announce some important updates to our training schedule.
 

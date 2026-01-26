@@ -88,7 +88,7 @@ export function WaiverModal({
             )}
 
             <p>
-              In consideration for being permitted to participate in The Lacrosse Lab
+              In consideration for being permitted to participate in Experiment Lacrosse
               training sessions and activities, I hereby acknowledge and agree to the following:
             </p>
 
@@ -102,13 +102,13 @@ export function WaiverModal({
               <li>
                 <strong>Release of Liability:</strong> I, for myself and on behalf of my
                 heirs, assigns, personal representatives and next of kin, hereby release,
-                indemnify, and hold harmless The Lacrosse Lab, its officers, officials,
+                indemnify, and hold harmless Experiment Lacrosse, its officers, officials,
                 agents, employees, and volunteers from any and all claims, demands, losses,
                 and liability arising out of or related to any injury, disability, or death
                 that may occur as a result of participation.
               </li>
               <li>
-                <strong>Medical Authorization:</strong> I authorize The Lacrosse Lab to
+                <strong>Medical Authorization:</strong> I authorize Experiment Lacrosse to
                 obtain emergency medical treatment for the participant if needed. I understand
                 that I am responsible for any medical expenses incurred.
               </li>
@@ -118,7 +118,7 @@ export function WaiverModal({
               </li>
               <li>
                 <strong>Rules and Conduct:</strong> I agree to follow all rules, instructions,
-                and safety guidelines provided by The Lacrosse Lab staff. I understand that
+                and safety guidelines provided by Experiment Lacrosse staff. I understand that
                 failure to comply may result in removal from the program without refund.
               </li>
             </ol>
@@ -151,7 +151,7 @@ export function WaiverModal({
                 PARENT/GUARDIAN ACKNOWLEDGMENT: I am the parent or legal guardian of the
                 minor participant(s) listed above. I have read this waiver and release
                 and understand its terms. I sign it voluntarily and with full knowledge
-                of its significance. I agree to indemnify and hold harmless The Lacrosse Lab
+                of its significance. I agree to indemnify and hold harmless Experiment Lacrosse
                 from any claims brought by or on behalf of the minor participant(s).
               </p>
             ) : (
