@@ -9,7 +9,7 @@ import Image from "next/image"
 import { Menu, X } from "lucide-react"
 import { CartIcon } from "@/components/cart-icon"
 import { useState } from "react"
-import { logger } from "@/lib/utils"
+import { logger, isAdminEmail } from "@/lib/utils"
 
 export function Navigation() {
   const pathname = usePathname()
@@ -27,7 +27,7 @@ export function Navigation() {
   }
 
   // Check if user is admin
-  const isAdmin = user?.email?.endsWith('@thelacrosselab.com')
+  const isAdmin = isAdminEmail(user?.email)
 
   // Show loading state while auth is initializing
   if (loading) {

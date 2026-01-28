@@ -11,7 +11,7 @@ import { useToast } from '@/components/ui/toast'
 import { Eye, Send } from 'lucide-react'
 import { BroadcastEmail } from '@/emails/broadcast-template'
 import { renderEmailTemplate } from '@/lib/email/utils'
-import { logger } from '@/lib/utils'
+import { logger, isAdminEmail } from '@/lib/utils'
 
 export default function AdminBroadcastPage() {
   const [subject, setSubject] = useState<string>('')
@@ -52,7 +52,7 @@ export default function AdminBroadcastPage() {
       return
     }
 
-    if (!user.email?.endsWith('@thelacrosselab.com')) {
+    if (!isAdminEmail(user.email)) {
       router.push('/')
       return
     }

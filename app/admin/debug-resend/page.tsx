@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { useRouter } from 'next/navigation'
 import { getSupabaseClient } from '@/lib/supabase/client'
 import { useToast } from '@/components/ui/toast'
-import { logger } from '@/lib/utils'
+import { logger, isAdminEmail } from '@/lib/utils'
 import { useEffect } from 'react'
 
 export default function AdminDebugResendPage() {
@@ -33,7 +33,7 @@ export default function AdminDebugResendPage() {
       return
     }
 
-    if (!user.email?.endsWith('@thelacrosselab.com')) {
+    if (!isAdminEmail(user.email)) {
       router.push('/')
       return
     }

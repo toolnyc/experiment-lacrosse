@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Search, User, Calendar, DollarSign, Eye } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/components/ui/toast'
-import { formatDateOnly, logger } from '@/lib/utils'
+import { formatDateOnly, logger, isAdminEmail } from '@/lib/utils'
 
 interface Athlete {
   id: string
@@ -68,7 +68,7 @@ export default function AdminAthletesPage() {
       }
 
       // Check if user is admin
-      if (!user.email?.endsWith('@thelacrosselab.com')) {
+      if (!isAdminEmail(user.email)) {
         router.push('/')
         return
       }

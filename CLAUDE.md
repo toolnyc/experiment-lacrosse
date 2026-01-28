@@ -10,7 +10,7 @@ This is a **Next.js 15** application (App Router) for managing lacrosse training
 
 - `app/` - Next.js App Router pages and API routes
   - `app/api/` - API endpoints (checkout, webhooks, admin operations)
-  - `app/admin/` - Admin dashboard (requires @thelacrosselab.com email)
+  - `app/admin/` - Admin dashboard (requires @experimentlacrosse.com or @thelacrosselab.com email)
   - `app/member/` - Authenticated user pages
 - `components/ui/` - shadcn/ui components (Radix-based, CVA variants)
 - `contexts/` - React Context providers (AuthContext, CartContext)

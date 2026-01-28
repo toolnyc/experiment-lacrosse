@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
 import { getSupabaseServer } from '@/lib/supabase/server'
-import { logger } from '@/lib/utils'
+import { logger, isAdminEmail } from '@/lib/utils'
 
 /**
  * Normalize location string by capitalizing properly
@@ -55,14 +55,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    if (!user.email?.endsWith('@thelacrosselab.com')) {
+    if (!isAdminEmail(user.email)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const body = await request.json()
-    const { 
-      name, 
-      description, 
+    const {
+      name,
+      description,
       price_cents, 
       currency = 'usd',
       session_date,
@@ -179,13 +179,13 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    if (!user.email?.endsWith('@thelacrosselab.com')) {
+    if (!isAdminEmail(user.email)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const body = await request.json()
-    const { 
-      productId, 
+    const {
+      productId,
       priceId, 
       name, 
       description, 
@@ -345,7 +345,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    if (!user.email?.endsWith('@thelacrosselab.com')) {
+    if (!isAdminEmail(user.email)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 

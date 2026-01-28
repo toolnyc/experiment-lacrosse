@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { getSupabaseClient } from '@/lib/supabase/client'
+import { isAdminEmail } from '@/lib/utils'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Calendar, ClipboardList, Mail, Users } from 'lucide-react'
@@ -15,13 +16,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const checkAdminAccess = async () => {
       const supabase = getSupabaseClient()
       const { data: { user } } = await supabase.auth.getUser()
-      
+
       if (!user) {
         router.push('/login?redirect=' + encodeURIComponent(pathname))
         return
       }
 
-      if (!user.email?.endsWith('@thelacrosselab.com')) {
+      if (!isAdminEmail(user.email)) {
         router.push('/')
         return
       }

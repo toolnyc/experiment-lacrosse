@@ -5,7 +5,7 @@ import { getSupabaseClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { logger, formatDateOnly } from '@/lib/utils'
+import { logger, formatDateOnly, isAdminEmail } from '@/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { 
@@ -75,7 +75,7 @@ export default function AdminRosterManagePage() {
       }
 
       // Check if user is admin
-      if (!user.email?.endsWith('@thelacrosselab.com')) {
+      if (!isAdminEmail(user.email)) {
         router.push('/')
         return
       }

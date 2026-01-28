@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseServer } from '@/lib/supabase/server'
 import { sendBroadcastToAudience } from '@/lib/email/service'
-import { logger } from '@/lib/utils'
+import { logger, isAdminEmail } from '@/lib/utils'
 import { randomUUID } from 'crypto'
 
 interface BroadcastRequest {
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user is admin
-    if (!user.email?.endsWith('@thelacrosselab.com')) {
+    if (!isAdminEmail(user.email)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 

@@ -6,6 +6,19 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Admin email domains - supports both old and new brand during transition
+ */
+const ADMIN_EMAIL_DOMAINS = ['@experimentlacrosse.com', '@thelacrosselab.com']
+
+/**
+ * Checks if an email belongs to an admin (matches any admin domain)
+ */
+export function isAdminEmail(email: string | null | undefined): boolean {
+  if (!email) return false
+  return ADMIN_EMAIL_DOMAINS.some(domain => email.endsWith(domain))
+}
+
+/**
  * Masks email addresses for logging (keeps first char, last char before @, and domain)
  * Example: test@example.com -> t**t@example.com
  */
