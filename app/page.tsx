@@ -29,13 +29,13 @@ export default function HomePage() {
         </div>
       </main>
 
-      {/* About The Lab Section */}
+      {/* About Us Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="container mx-auto max-w-4xl">
           <AnimatedSection animation="fadeIn" delay={0.2} scrollTrigger>
             <div className="text-center mb-12">
               <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-foreground">
-                About The Lab
+                About Us
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
             </div>
