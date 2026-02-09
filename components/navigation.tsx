@@ -29,24 +29,6 @@ export function Navigation() {
   // Check if user is admin
   const isAdmin = isAdminEmail(user?.email)
 
-  // Show loading state while auth is initializing
-  if (loading) {
-    return (
-      <nav className="w-full border-b bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
-        <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center">
-              <Link href="/" className="flex items-center">
-                <Image src="/brand/icon-red.svg" alt="Experiment Lacrosse" width={40} height={40} className="h-8 w-auto" />
-              </Link>
-            </div>
-            <div className="text-sm text-muted-foreground">Loading...</div>
-          </div>
-        </div>
-      </nav>
-    )
-  }
-
   return (
     <nav className="w-full border-b bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
       <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -62,10 +44,9 @@ export function Navigation() {
           <div className="hidden md:flex items-center space-x-4">
             {/* Cart Icon */}
             <CartIcon />
-            {/* Conditional items based on auth status */}
-            {user ? (
+            {/* Auth-dependent items — deferred while loading */}
+            {!loading && (user ? (
               <>
-                {/* Admin Dashboard Button - only for admin users */}
                 {isAdmin && (
                   <Link href="/admin/products">
                     <Button variant="outline" size="sm" className="bg-primary border-red-200 text-cream hover:bg-cream hover:text-primary">
@@ -73,14 +54,11 @@ export function Navigation() {
                     </Button>
                   </Link>
                 )}
-
-                 {/* Available Sessions - always shown */}
-                 <Link href="/pricing">
+                <Link href="/pricing">
                   <Button variant="outline" size="sm">
                     Available Sessions
                   </Button>
                 </Link>
-            
                 <Link href="/member/dashboard">
                   <Button variant="outline" size="sm">
                     Dashboard
@@ -100,7 +78,7 @@ export function Navigation() {
                   Sign In
                 </Button>
               </Link>
-            )}
+            ))}
           </div>
 
           {/* Mobile menu button */}
@@ -167,11 +145,10 @@ export function Navigation() {
                 </Link>
               </nav>
 
-              {/* User actions */}
+              {/* User actions — deferred while loading */}
               <div className="pt-8 border-t border-border space-y-6 flex flex-col gap-4">
-                {user ? (
+                {!loading && (user ? (
                   <>
-                    {/* Admin Dashboard Button - only for admin users */}
                     {isAdmin && (
                       <Link href="/admin/products" onClick={() => setIsMobileMenuOpen(false)}>
                         <Button variant="outline" className="w-full text-lg py-6 h-auto">
@@ -179,7 +156,6 @@ export function Navigation() {
                         </Button>
                       </Link>
                     )}
-                    
                     <Link href="/member/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                       <Button variant="outline" className="w-full text-lg py-6 h-auto">
                         Dashboard
@@ -199,7 +175,7 @@ export function Navigation() {
                       Sign In
                     </Button>
                   </Link>
-                )}
+                ))}
               </div>
             </div>
           </div>

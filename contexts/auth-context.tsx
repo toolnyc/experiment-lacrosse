@@ -32,76 +32,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const supabase = getSupabaseClient()
 
-  // Initialize auth state
+  // Initialize auth state via onAuthStateChange only.
+  // Supabase fires INITIAL_SESSION immediately on subscription,
+  // so there's no need for a separate getSession()/getUser() call.
+  // This avoids a race condition with React Strict Mode double-mount.
   useEffect(() => {
-    let mounted = true
-
-    const initializeAuth = async () => {
-      try {
-        // Get the current session
-        const { data: { session }, error } = await supabase.auth.getSession()
-        
-        if (error) {
-          logger.error('Error getting session', { error })
-          if (mounted) {
-            setState(prev => ({ ...prev, error: error.message, loading: false }))
-          }
-          return
-        }
-
-        // If we have a session, validate it
-        if (session) {
-          const { data: { user }, error: userError } = await supabase.auth.getUser()
-          
-          if (userError) {
-            logger.error('Error validating user', { error: userError })
-            // Don't sign out immediately, let the auth state change handle it
-          }
-        }
-
-        if (mounted) {
-          setState({
-            user: session?.user ?? null,
-            session,
-            loading: false,
-            error: null
-          })
-        }
-      } catch (error) {
-        logger.error('Unexpected error initializing auth', { error })
-        if (mounted) {
-          setState(prev => ({ 
-            ...prev, 
-            error: 'Failed to initialize authentication', 
-            loading: false 
-          }))
-        }
-      }
-    }
-
-    initializeAuth()
-
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         logger.debug('Auth state changed:', event)
-        
-        if (mounted) {
-          setState(prev => ({
-            ...prev,
-            user: session?.user ?? null,
-            session,
-            loading: false,
-            error: null
-          }))
-        }
+        setState({
+          user: session?.user ?? null,
+          session,
+          loading: false,
+          error: null,
+        })
       }
     )
 
-    return () => {
-      mounted = false
-      subscription.unsubscribe()
-    }
+    return () => subscription.unsubscribe()
   }, [])
 
   const signIn = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {

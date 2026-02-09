@@ -46,7 +46,11 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://experimentlacrosse.com'),
+  metadataBase: (() => {
+    const url = process.env.NEXT_PUBLIC_SITE_URL || 'https://experimentlacrosse.com'
+    try { return new URL(url.startsWith('http') ? url : `https://${url}`) }
+    catch { return new URL('https://experimentlacrosse.com') }
+  })(),
   alternates: {
     canonical: '/',
   },
