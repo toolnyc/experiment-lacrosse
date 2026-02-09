@@ -48,6 +48,8 @@ const supabase = await getSupabaseServer()
 - Product sync via `lib/stripe-service.ts`
 - Waiver signature required before checkout
 
+**Stripe ↔ Resend coupling**: The purchase confirmation email is triggered by the Stripe webhook (`checkout.session.completed`), not by application code directly. Changes to email sending (Resend API keys, from addresses, domains, templates) require verifying the corresponding Stripe webhook configuration in the Stripe dashboard. Stale webhook endpoints pointing to old deployments will send emails using old keys/templates and poison the idempotency check (`webhook_events` table), silently preventing the current deployment's emails from sending.
+
 ### Path Alias
 
 `@/*` maps to the project root (e.g., `@/components/ui/button`).
