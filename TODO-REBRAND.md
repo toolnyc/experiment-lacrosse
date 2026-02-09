@@ -16,13 +16,13 @@ Remaining tasks to complete the rebrand from The Lacrosse Lab to Experiment Lacr
 
 ## Resend Email Configuration
 
-- [ ] Add new domain in Resend Dashboard
+- [x] Add new domain in Resend Dashboard
   1. Go to Resend Dashboard → Domains → Add Domain
   2. Add `experimentlacrosse.com`
   3. Add the DNS records Resend provides (SPF, DKIM, DMARC)
   4. Wait for verification (usually a few minutes)
 
-- [ ] Update environment variable in production
+- [x] Update environment variable in production
   ```
   RESEND_FROM_EMAIL=noreply@experimentlacrosse.com
   ```

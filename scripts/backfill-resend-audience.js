@@ -10,8 +10,8 @@
 //   RESEND_API_KEY - Resend API key
 //   RESEND_AUDIENCE_ID - Resend audience UUID
 
-import { createClient } from '@supabase/supabase-js'
-import { Resend } from 'resend'
+const { createClient } = require('@supabase/supabase-js')
+const { Resend } = require('resend')
 
 // Simple logger for script
 const logger = {
@@ -120,8 +120,8 @@ async function backfillResendAudience() {
     const errors = []
 
     // Process users in batches to avoid rate limits
-    const BATCH_SIZE = 10
-    const DELAY_MS = 1000 // 1 second delay between batches
+    const BATCH_SIZE = 2
+    const DELAY_MS = 1500 // 1.5 second delay between batches to respect 2 req/sec limit
 
     for (let i = 0; i < users.length; i += BATCH_SIZE) {
       const batch = users.slice(i, i + BATCH_SIZE)

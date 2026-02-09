@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",
-    "stripe": "node scripts/stripe-listen-with-env-update.js"
+    "stripe": "node scripts/stripe-listen-with-env-update.js",
+    "predeploy": "claude -p 'Review all files changed since last deploy (git diff origin/master..HEAD) for: 1) ambiguous db relationships 2) nullable type issues 3) missing error handling 4) API parameter correctness. Output a markdown checklist of findings.' --allowedTools 'Read,Bash,Glob,Grep'",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
