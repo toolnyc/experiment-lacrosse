@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
 import { getSupabaseService } from "@/lib/supabase/service"
 import type Stripe from "stripe"
-import { logger } from '@/lib/utils'
+import { logger, maskEmail } from '@/lib/utils'
 import { sendPurchaseConfirmation, addContactToResend } from '@/lib/email/service'
 import { randomUUID } from 'crypto'
 
@@ -288,11 +288,11 @@ export async function POST(request: NextRequest) {
                   })
 
                   // Generate order number from payment ID
-                  const orderNumber = `LAB-${payment.id.slice(0, 8).toUpperCase()}`
+                  const orderNumber = `EXP-${payment.id.slice(0, 8).toUpperCase()}`
 
                   // Send confirmation email
                   logger.info('purchase_confirmation.init', {
-                    to: userData.email,
+                    to: maskEmail(userData.email),
                     orderNumber,
                     traceId,
                   })

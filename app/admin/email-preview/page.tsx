@@ -19,7 +19,7 @@ export default function EmailPreviewPage() {
 
   // Mock data for PurchaseConfirmationEmail
   const mockPurchaseData = {
-    orderNumber: 'LAB-123456',
+    orderNumber: 'EXP-123456',
     orderDate: orderDate || '2024-01-01T00:00:00.000Z',
     customerName: 'John Doe',
     items: [

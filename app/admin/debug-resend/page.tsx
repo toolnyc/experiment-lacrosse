@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { useRouter } from 'next/navigation'
 import { getSupabaseClient } from '@/lib/supabase/client'
 import { useToast } from '@/components/ui/toast'
-import { logger, isAdminEmail } from '@/lib/utils'
+import { logger, isAdminEmail, maskEmail } from '@/lib/utils'
 import { useEffect } from 'react'
 
 export default function AdminDebugResendPage() {
@@ -50,7 +50,7 @@ export default function AdminDebugResendPage() {
     setError(null)
 
     try {
-      logger.info('debug_resend.test_initiated', { email })
+      logger.info('debug_resend.test_initiated', { email: maskEmail(email) })
       
       const apiResponse = await fetch('/api/resend/add-contact', {
         method: 'POST',
@@ -81,7 +81,7 @@ export default function AdminDebugResendPage() {
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error'
-      logger.error('debug_resend.test_failed', { error: errorMessage, email })
+      logger.error('debug_resend.test_failed', { error: errorMessage, email: maskEmail(email) })
       setError(errorMessage)
       showToast('Error testing contact addition', 'error')
     } finally {

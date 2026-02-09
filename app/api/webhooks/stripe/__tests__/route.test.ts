@@ -234,7 +234,7 @@ describe('POST /api/webhooks/stripe', () => {
       expect.objectContaining({
         to: 'test@example.com',
         customerName: mockUser.full_name,
-        orderNumber: expect.stringMatching(/^LAB-/),
+        orderNumber: expect.stringMatching(/^EXP-/),
         orderDate: expect.any(String),
         items: expect.arrayContaining([
           expect.objectContaining({
