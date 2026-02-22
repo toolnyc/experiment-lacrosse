@@ -33,7 +33,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true })
     }
 
-    const actionLink = data.properties.action_link
+    // Construct the verification URL ourselves instead of using data.properties.action_link.
+    // Supabase's action_link has a broken redirect_to (Site URL misconfiguration causes
+    // "supabase.co/experiment-lacrosse.vercel.app" instead of a proper redirect).
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+    const redirectTo = encodeURIComponent(`${origin}/auth/callback`)
+    const verifyLink = `${supabaseUrl}/auth/v1/verify?token=${data.properties.hashed_token}&type=recovery&redirect_to=${redirectTo}`
 
     const resend = getResend()
     const { error: emailError } = await resend.emails.send({
@@ -44,7 +49,7 @@ export async function POST(request: NextRequest) {
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
           <h2>Reset your password</h2>
           <p>We received a request to reset your password. Click the link below to choose a new one:</p>
-          <p><a href="${actionLink}" style="display: inline-block; padding: 12px 24px; background-color: #000; color: #fff; text-decoration: none; border-radius: 6px;">Reset Password</a></p>
+          <p><a href="${verifyLink}" style="display: inline-block; padding: 12px 24px; background-color: #000; color: #fff; text-decoration: none; border-radius: 6px;">Reset Password</a></p>
           <p style="color: #666; font-size: 14px;">If you didn't request this, you can safely ignore this email.</p>
           <p style="color: #666; font-size: 14px;">This link will expire in 24 hours.</p>
         </div>
