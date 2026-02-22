@@ -4,8 +4,10 @@ import { NextResponse, type NextRequest } from "next/server"
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl
   const code = searchParams.get("code")
+  const tokenHash = searchParams.get("token_hash")
+  const type = searchParams.get("type")
 
-  if (!code) {
+  if (!code && !tokenHash) {
     return NextResponse.redirect(`${origin}/login?error=reset_failed`)
   }
 
@@ -29,7 +31,21 @@ export async function GET(request: NextRequest) {
     },
   )
 
-  const { error } = await supabase.auth.exchangeCodeForSession(code)
+  let error: Error | null = null
+
+  if (tokenHash) {
+    // Password reset flow: verify the hashed token directly (bypasses Supabase's
+    // broken /auth/v1/verify redirect)
+    const result = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: (type as 'recovery') || 'recovery',
+    })
+    error = result.error
+  } else if (code) {
+    // Standard PKCE flow (e.g. OAuth callbacks)
+    const result = await supabase.auth.exchangeCodeForSession(code)
+    error = result.error
+  }
 
   if (error) {
     return NextResponse.redirect(`${origin}/login?error=reset_failed`)

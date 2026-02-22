@@ -33,12 +33,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true })
     }
 
-    // Construct the verification URL ourselves instead of using data.properties.action_link.
-    // Supabase's action_link has a broken redirect_to (Site URL misconfiguration causes
-    // "supabase.co/experiment-lacrosse.vercel.app" instead of a proper redirect).
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-    const redirectTo = encodeURIComponent(`${origin}/auth/callback`)
-    const verifyLink = `${supabaseUrl}/auth/v1/verify?token=${data.properties.hashed_token}&type=recovery&redirect_to=${redirectTo}`
+    // Send the user directly to our auth callback with the hashed token.
+    // We bypass Supabase's /auth/v1/verify endpoint entirely because its
+    // redirect is broken (Site URL misconfiguration appends our domain as
+    // a path segment on the Supabase URL). Our callback uses verifyOtp()
+    // to exchange the token_hash for a session server-side.
+    const verifyLink = `${origin}/auth/callback?token_hash=${data.properties.hashed_token}&type=recovery`
 
     const resend = getResend()
     const { error: emailError } = await resend.emails.send({
