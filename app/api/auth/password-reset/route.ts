@@ -1,6 +1,9 @@
-import { getSupabaseServer } from "@/lib/supabase/server"
+import { getSupabaseService } from "@/lib/supabase/service"
+import { getResend } from "@/lib/email/resend-client"
 import { NextResponse, type NextRequest } from "next/server"
-import { logger } from "@/lib/utils"
+import { logger, maskEmail } from "@/lib/utils"
+
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'carter@experimentlacrosse.com'
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,20 +13,61 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 })
     }
 
-    const supabase = await getSupabaseServer()
+    const supabase = getSupabaseService()
     const origin = request.nextUrl.origin
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${origin}/auth/callback`,
+    const { data, error } = await supabase.auth.admin.generateLink({
+      type: 'recovery',
+      email,
+      options: {
+        redirectTo: `${origin}/auth/callback`,
+      },
     })
 
     if (error) {
-      logger.error("Password reset error", { error: error.message })
+      logger.error("Password reset link generation failed", {
+        email: maskEmail(email),
+        error: error.message,
+      })
+      // Always return success to avoid leaking whether an email exists
+      return NextResponse.json({ success: true })
+    }
+
+    const actionLink = data.properties.action_link
+
+    const resend = getResend()
+    const { error: emailError } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: 'Reset your password — Experiment Lacrosse',
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
+          <h2>Reset your password</h2>
+          <p>We received a request to reset your password. Click the link below to choose a new one:</p>
+          <p><a href="${actionLink}" style="display: inline-block; padding: 12px 24px; background-color: #000; color: #fff; text-decoration: none; border-radius: 6px;">Reset Password</a></p>
+          <p style="color: #666; font-size: 14px;">If you didn't request this, you can safely ignore this email.</p>
+          <p style="color: #666; font-size: 14px;">This link will expire in 24 hours.</p>
+        </div>
+      `,
+    })
+
+    if (emailError) {
+      logger.error("Password reset email send failed", {
+        email: maskEmail(email),
+        error: emailError.message,
+      })
+    } else {
+      logger.info("Password reset email sent", {
+        email: maskEmail(email),
+      })
     }
 
     // Always return success to avoid leaking whether an email exists
     return NextResponse.json({ success: true })
-  } catch {
+  } catch (err) {
+    logger.error("Password reset unexpected error", {
+      error: err instanceof Error ? err.message : "Unknown error",
+    })
     return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 })
   }
 }
