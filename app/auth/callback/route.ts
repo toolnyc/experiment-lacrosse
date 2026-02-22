@@ -5,13 +5,14 @@ export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl
   const code = searchParams.get("code")
   const tokenHash = searchParams.get("token_hash")
-  const type = searchParams.get("type")
 
   if (!code && !tokenHash) {
     return NextResponse.redirect(`${origin}/login?error=reset_failed`)
   }
 
-  const redirectUrl = `${origin}/update-password`
+  // If we have a token_hash, this is a password reset flow → go to update-password.
+  // Otherwise it's an OAuth callback → go to member dashboard.
+  const redirectUrl = tokenHash ? `${origin}/update-password` : `${origin}/member/dashboard`
   const response = NextResponse.redirect(redirectUrl)
 
   const supabase = createServerClient(
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest) {
     // broken /auth/v1/verify redirect)
     const result = await supabase.auth.verifyOtp({
       token_hash: tokenHash,
-      type: (type as 'recovery') || 'recovery',
+      type: 'recovery',
     })
     error = result.error
   } else if (code) {

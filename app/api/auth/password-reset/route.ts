@@ -5,8 +5,33 @@ import { logger, maskEmail } from "@/lib/utils"
 
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'carter@experimentlacrosse.com'
 
+// Simple in-memory rate limit: max 3 requests per IP per 15-minute window
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000
+const RATE_LIMIT_MAX = 3
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now()
+  const entry = rateLimitMap.get(ip)
+
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
+    return false
+  }
+
+  entry.count++
+  return entry.count > RATE_LIMIT_MAX
+}
+
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
+    if (isRateLimited(ip)) {
+      logger.warn("Password reset rate limited", { ip })
+      // Return success to avoid leaking info, but don't actually process
+      return NextResponse.json({ success: true })
+    }
+
     const { email } = await request.json()
 
     if (!email) {
